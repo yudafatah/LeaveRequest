@@ -5,11 +5,16 @@
  */
 package interfaces;
 
+import java.util.List;
+
 /**
  *
  * @author yudafatah
  */
 public interface DAOInterface {
     public boolean login(String username, String password);
+    public boolean doDML(Object object, boolean isDelete);//iud
+    public List<Object> doDDL(Object table, String keyword);//sga
+    public Object getById(Object entity,Object id);
     
 }
