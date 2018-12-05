@@ -6,14 +6,20 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -26,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a")
     , @NamedQuery(name = "Account.findByUsername", query = "SELECT a FROM Account a WHERE a.username = :username")
     , @NamedQuery(name = "Account.findByPassword", query = "SELECT a FROM Account a WHERE a.password = :password")
-    , @NamedQuery(name = "Account.findByRole", query = "SELECT a FROM Account a WHERE a.role = :role")})
+    , @NamedQuery(name = "Account.findByRole", query = "SELECT a FROM Account a WHERE a.role = :role")
+    , @NamedQuery(name = "Account.findByIslogin", query = "SELECT a FROM Account a WHERE a.islogin = :islogin")})
 public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,6 +47,13 @@ public class Account implements Serializable {
     @Basic(optional = false)
     @Column(name = "ROLE")
     private String role;
+    @Column(name = "ISLOGIN")
+    private String islogin;
+    @JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "EMPLOYEE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Employee employeeId;
+    @OneToMany(mappedBy = "username", fetch = FetchType.LAZY)
+    private List<Employee> employeeList;
 
     public Account() {
     }
@@ -76,6 +90,31 @@ public class Account implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getIslogin() {
+        return islogin;
+    }
+
+    public void setIslogin(String islogin) {
+        this.islogin = islogin;
+    }
+
+    public Employee getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Employee employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    @XmlTransient
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
     }
 
     @Override

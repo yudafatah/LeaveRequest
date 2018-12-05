@@ -42,6 +42,13 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Employee.findByManagerId", query = "SELECT e FROM Employee e WHERE e.managerId = :managerId")})
 public class Employee implements Serializable {
 
+    @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account username;
+
+    @OneToMany(mappedBy = "employeeId", fetch = FetchType.LAZY)
+    private List<Account> accountList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -183,6 +190,23 @@ public class Employee implements Serializable {
     @Override
     public String toString() {
         return "entities.Employee[ employeeId=" + employeeId + " ]";
+    }
+
+    @XmlTransient
+    public List<Account> getAccountList() {
+        return accountList;
+    }
+
+    public void setAccountList(List<Account> accountList) {
+        this.accountList = accountList;
+    }
+
+    public Account getUsername() {
+        return username;
+    }
+
+    public void setUsername(Account username) {
+        this.username = username;
     }
     
 }
